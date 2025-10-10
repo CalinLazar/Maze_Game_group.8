@@ -51,6 +51,8 @@ state = {
     "frontdesk_failures": 0,
 }
 
+print("Git successfully installed ! ")
+
 # Changed "studylandscape" to "teachersroom1" and "enterStudylandscape" to "enterTeachersRoom1"
 while True:
     current = state["current_room"]
