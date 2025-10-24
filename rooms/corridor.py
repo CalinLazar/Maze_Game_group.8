@@ -90,6 +90,8 @@ def enterCorridor(state):
         print("- go <room name>      : Move to another room. Example: go classroom2015")
         print("- ?                   : Show this help message.")
         print("- leaderbaord         : Display current leaderboard.")
+        print("- save <give name>    : Saves the current state of the game under the given name")
+        print("- load <name of save> : loads previosly saved state")
         print("- wallet              : Show how many coins you have.")
         print("- quit                : Quit the game.")
 
@@ -121,6 +123,17 @@ def enterCorridor(state):
         elif command == "wallet":
             from .utils import show_wallet
             show_wallet(state)
+        elif command.startswith("save "):
+            from .saving import save
+            name = command[4:].strip()
+            save(state,name)
+        elif command.startswith("load "):
+            from .saving import load
+            name = command[4:].strip()
+            newState = load(state,name)
+            state.clear()
+            state.update(newState)
+            return state["current_room"]
         elif command == "quit":
             print("👋 You leave the school and the adventure comes to an end. Game over.")
             sys.exit()
