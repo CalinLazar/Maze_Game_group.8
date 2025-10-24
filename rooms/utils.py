@@ -10,7 +10,7 @@ import os
 
 def clearScreen():
     if os.getenv("PYCHARM_HOSTED"):
-        print("\n" * 50)  # fallback for PyCharm
+        print("\n" * 50)
     else:
         os.system('cls' if os.name == 'nt' else 'clear')
 
@@ -23,7 +23,7 @@ def chooseNextRoom(choices):
     try:
         index = int(choice) - 1
         if 0 <= index < len(choices):
-            clearScreen()  # ✅ Clear screen before entering the selected room
+            clearScreen()
             return choices[index]
         else:
             print("Invalid choice.")
@@ -32,7 +32,5 @@ def chooseNextRoom(choices):
         print("Invalid input.")
         return None
 
-#  Wallet helper function
 def show_wallet(state):
-    """Show player's current coins."""
     print(f"🪙 You currently have {state['coins']} coins.")

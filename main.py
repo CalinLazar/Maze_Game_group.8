@@ -6,9 +6,9 @@
 # Date: July 2025
 # -----------------------------------------------------------------------------
 
+import time
 from rooms import (enterCorridor, enterTeachersRoom1, enterClassroom2015, enterProjectRoom3,
                    enterLab2001, enterProjectRoom1, enterFrontDesk, enterEquinox, enterCorrectionRoom)
-
 
 def print_ascii_banner():
     banner = r"""
@@ -53,7 +53,7 @@ state = {
 
 print("Git successfully installed ! ")
 
-# Changed "studylandscape" to "teachersroom1" and "enterStudylandscape" to "enterTeachersRoom1"
+state["start_time"] = time.time()
 while True:
     current = state["current_room"]
 

@@ -11,12 +11,6 @@ import threading
 import time
 
 def enterFrontDesk(state):
-    """
-    Front Desk Room - Time-limited stealth mini-game.
-    First failure → Equinox
-    Second failure → Correction Room
-    """
-
     print("\n🛎️ You quietly approach the school's Front Desk.")
     print("The receptionist is away, but could return at any moment...")
     print("Your goal: steal the calculator before time runs out.")
@@ -47,7 +41,7 @@ def enterFrontDesk(state):
 
     searchable_places = {
         "under chair": "You crouch down and peek under the chair… just dust and gum.",
-        "drawer": "You quietly slide open the drawer…",  # ✅ added for consistency
+        "drawer": "You quietly slide open the drawer…",
         "shelf": "You shuffle through the supply shelf… only paper stacks and staplers.",
         "desk": "You search around the messy desk.\nYou flip over folders but find nothing.",
         "folders": "You go through the folders. Nothing useful.",
@@ -65,7 +59,6 @@ def enterFrontDesk(state):
 
     def handle_search(place):
         nonlocal calculator_found
-        # ✅ if timer expired, trigger failure right away
         if timer_expired["done"]:
             return handle_failure()
         place = place.lower()
@@ -97,7 +90,7 @@ def enterFrontDesk(state):
                     state["inventory"].append("calculator")
                     state["visited"]["frontdesk"] = True
                     timer_active["running"] = False
-                    return "corridor"  # ✅ auto-leave after theft
+                    return "corridor"
                 else:
                     print("You already took the calculator.")
             else:
@@ -120,7 +113,6 @@ def enterFrontDesk(state):
             return None
 
     def handle_failure():
-        """centralized failure logic if timer expires mid-action"""
         timer_active["running"] = False
         state["frontdesk_failures"] += 1
         if state["frontdesk_failures"] == 1:
@@ -135,7 +127,6 @@ def enterFrontDesk(state):
             state["visited"]["frontdesk"] = False
             return "correctionroom"
 
-    # --- Main loop ---
     while True:
         if timer_expired["done"]:
             return handle_failure()

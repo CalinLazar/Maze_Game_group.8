@@ -10,13 +10,6 @@ import sys
 import time
 
 def enterEquinox(state):
-    """
-    Equinox Room - Punishment room triggered after a failed theft.
-    First offense → short wait.
-    Second offense → longer wait.
-    Third offense → sent to Correction Room.
-    """
-
     print("\n🌑 You have been sent to the Equinox Student Society Waiting Room.")
     state["equinox_attempts"] = state.get("equinox_attempts", 0) + 1
 
@@ -34,8 +27,6 @@ def enterEquinox(state):
         return "correctionroom"
 
     print("\n⏳ Waiting...")
-
-    # ✅ cleaned countdown output
     for remaining in range(wait_time, 0, -1):
         mins = remaining // 60
         secs = remaining % 60
