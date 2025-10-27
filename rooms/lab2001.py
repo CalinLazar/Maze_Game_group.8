@@ -20,7 +20,7 @@ def enterLab2001(state):
    timer_active = {"running": True}
 
    def countdown(limit=60):
-       reminders = {30: "Only 30 seconds remain!", 10: "10 seconds left!", 5: "Just 5 seconds! Hurry!"}
+       reminders = {30: "Only 30 seconds remain! \n>", 10: "10 seconds left! \n>", 5: "Just 5 seconds! Hurry!\n>"}
        total = limit
        while total > 0:
            time.sleep(1)
