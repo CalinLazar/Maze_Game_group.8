@@ -7,12 +7,36 @@
 # -----------------------------------------------------------------------------
 import sys
 from .utils import chooseNextRoom
+import threading
+import time
+
 # Room lab2.001 done by Vladimir
-timer = 0
+
 
 def enterLab2001(state):
    # --- Check if the player has the key to enter ---
-   global timer
+
+   timer_expired = {"done": False}
+   timer_active = {"running": True}
+
+   def countdown(limit=60):
+       reminders = {30: "Only 30 seconds remain!", 10: "10 seconds left!", 5: "Just 5 seconds! Hurry!"}
+       total = limit
+       while total > 0:
+           time.sleep(1)
+           if not timer_active["running"]:
+               return
+           total -= 1
+           if total in reminders:
+               print(f"\n{reminders[total]}")
+       if timer_active["running"]:
+           timer_expired["done"] = True
+
+   # 60s first time, 90s after
+   time_limit = 60 if not state["visited"]["lab2001"] else 9999
+   t = threading.Thread(target=countdown, args=(time_limit,), daemon=True)
+   t.start()
+
    if not state["visited"]["lab2001"]:
        if "key" not in state["inventory"]:
            print("\n You do have access to Lab2.001 try going somewhere else first")
@@ -25,7 +49,7 @@ def enterLab2001(state):
            print("Room is mostly empty now with chairs everywhere and some remains of notes people were making.")
            print("Maybe you could look around to find a useful note.")
            print("But be fast you can hear that some students are about to come in")
-           timer = 50
+
    else:
        print("You enter the lab2.001 again.")
        print("While you open the door you see that its no longer empty.")
@@ -43,7 +67,7 @@ def enterLab2001(state):
                print("You are now in the lab2.001 there are a lot of students around working, but they dont seem to mind you")
                print("You can search the room again")
 
-               timer = 999999
+
            else:
                print("You take out of your pocket what coins you have")
                print("You both look down at your pawn only for him to laugh")
@@ -109,21 +133,21 @@ def enterLab2001(state):
            return True
        else:
            print("You can't find it here, quickly try looking somewhere else.")
-           global timer
-           timer -= 10
            return False
+
+   def handle_failure():
+        timer_active["running"] = False
+        print("Oh no you were too slow")
+        print("Students start coming in quickly filling up the room making it hard to search")
+        print("As more people enter you quietly exit the room")
+        return "corridor"
 
    # --- Main command loop ---
    while True:
        command = input("\n> ").strip().lower()
 
-
-       if timer <= 0:
-           print("Oh no you were too slow")
-           print("Students start coming in quickly filling up the room making it hard to search")
-           print("As more people enter you quietly exit the room")
-           return "corridor"
-
+       if timer_expired["done"]:
+           return handle_failure()
 
        if command == "look around":
            handle_look()
@@ -145,7 +169,7 @@ def enterLab2001(state):
            result = handle_answer(guess)
            if result:
                print("Good job you found it.")
-               print("It reads \" \"")
+               print("It reads \"Super secret technique \" surely some body will know what that means")
                print("- Note is been added to your inventory")
                print("You exit the room not wanting to cause disturbance")
                return "corridor"
